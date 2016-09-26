@@ -26,10 +26,14 @@ void adc_init()
 //read ADC value
 void adc_read()
 {
-
-    int AmbientHigh; //AmbientHigh is the comparator value of actual ambient light vs setpoint
-    AmbientHigh = 0; //Default value is 0 (Ambient light < Set point). 
-    float LightSetPoint; //LightSetPoint is the set point of ambient light (below which the LED light turns on)
+    /*AmbientHigh is the comparator value of actual ambient light vs setpoint
+    Default value is 0 (Ambient light < Set point).
+    LightSetPoint is the set point of ambient light (below which the LED light turns on)
+    */
+    
+    int AmbientHigh; 
+    AmbientHigh = 0;  
+    float LightSetPoint; 
     
     //configure the interrupt if required
     //delay
