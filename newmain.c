@@ -21,7 +21,7 @@ void adc_init()
      */
     
     ADCON0 = 0x21; //turn ON ADC, clock from FOSC; left-justified ADRES
-    ADCLK = 0xF0; //FOSC/32
+    ADCLK = 0x0F; //FOSC/32
     ADREF = 0x00; // Vref (+) and (-) are Vdd & Vss
     ADPCH = 0x02; // Select Analog channel A2
      
