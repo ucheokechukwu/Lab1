@@ -1,8 +1,8 @@
 /* 
- * File:   altmain.c
+ * File:   newmain.c
  * Author: Uche
- * Description: alternative code; 'prettier'
- * Created on September 26, 2016, 10:32 AM
+ *
+ * Created on September 24, 2016, 3:32 AM
  */
 
 #include <xc.h>
@@ -19,9 +19,9 @@ void adc_init()
     TRISB5 = 0; //set RB5 to write/output pin
     /*set A/D control registers
      */
-    
+
     ADCON0 = 0x21; //turn ON ADC, clock from FOSC; left-justified ADRES
-    ADCLK = 0x0F; //FOSC/32
+    ADCLK = 0x0F; // ADC conversion clock set at FOSC/32
     ADREF = 0x00; // Vref (+) and (-) are Vdd & Vss
     ADPCH = 0x02; // Select Analog channel A2
      
@@ -36,9 +36,10 @@ unsigned int adc_read()
     unsigned int AmbientLight;
        
     //delay - wait for the acquisition time.
+
     
     ADCON0bits.ADGO=1; //set the GO bit to start the ADC conversion
-    while (ADCON0bits.ADGO=1) continue; //wait for the conversion to end
+    while (ADCON0bits.ADGO==1) continue; //wait for the conversion to end
     
     //read ADC result & save as AmbientLight
     AmbientLight = ADRESL;
