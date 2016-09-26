@@ -8,7 +8,16 @@
 #include <xc.h>
 #include <pic.h>
 #include <pic16f18857.h>
+#include <time.h>
 
+/*delay function - not working yet... 
+
+void delay(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while (goal > clock());
+}
+*/
 
 //initialize ADC
 void adc_init()
@@ -35,8 +44,9 @@ unsigned int adc_read()
     */
     unsigned int AmbientLight;
        
-    //delay - wait for the acquisition time.
-
+    /*
+     delay(1000); //delay for 1ms
+     */
     
     ADCON0bits.ADGO=1; //set the GO bit to start the ADC conversion
     while (ADCON0bits.ADGO==1) continue; //wait for the conversion to end
