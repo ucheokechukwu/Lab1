@@ -67,7 +67,7 @@ unsigned int adc_read()
     return when the difference is less than 10
     */
     
-    } while ( abs(PrevAmbientLight - AmbientLight) < 10 ); 
+    } while ( abs(PrevAmbientLight - AmbientLight) > 10 ); 
     
     return AmbientLight;
     
