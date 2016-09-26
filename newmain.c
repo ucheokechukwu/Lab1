@@ -12,11 +12,14 @@
 //initialize ADC
 void adc_init()
 {
-    //select I/O pins//
+    /*select I/O pins
+     */
     TRISA2 = 1; //set RA2 to read/input pin
     TRISB5 = 0; //set RB5 to write/output pin
-    //set A/D control registers//
-    ADCON0 = 0x01; //turn ON ADC, clock from FOSC
+    /*set A/D control registers
+     */
+    
+    ADCON0 = 0x21; //turn ON ADC, clock from FOSC; left-justified ADRES
     ADCLK = 0xF0; //FOSC/32
     ADREF = 0x00; // Vref (+) and (-) are Vdd & Vss
     ADPCH = 0x02; // Select Analog channel A2
@@ -26,34 +29,40 @@ void adc_init()
 //read ADC value
 void adc_read()
 {
-    /*AmbientHigh is the comparator value of actual ambient light vs setpoint
-    Default value is 0 (Ambient light < Set point).
-    LightSetPoint is the set point of ambient light (below which the LED light turns on)
+    /*
+     AmbientLight is the value from the ADC result
+     LightSetPoint is the set point of ambient light 
     */
-    
-    int AmbientHigh; 
-    AmbientHigh = 0;  
-    float LightSetPoint; 
-    
-    //configure the interrupt if required
-    //delay
+       
+    unsigned int LightSetPoint; 
+    unsigned int AmbientLight;
+       
+    LightSetPoint = 512; //half of the span of the span (1024)
+       
+    //delay - wait for the acquisition time
     
     ADCON0bits.ADGO=1; //set the GO bit to start the ADC conversion
-    while (ADCON0bits.ADGO=1) continue;
+    while (ADCON0bits.ADGO=1) continue; //wait for the conversion to end
     
-    //read the value
+    
+    //read ADC result & save as AmbientLight
+    AmbientLight = ADRESL;
+    AmbientLight += ADRESH << 8; //left-justified ADRES
+
+    
+
     /*do the comparator
      * if the Ambient light is bright
-     * turn off the LED output RB5
-     * if Ambient is dim, turn on the LED output RB5.
+     * set RB5 (LED port pin) OFF
+     * ELSE set RB5 (LED port pin) ON
     */
-    if (AmbientHigh = 1) //if the Ambient light is bright
+    if (AmbientLight > LightSetPoint) 
     {
-        PORTBbits.RB5 = 0; //  set RB5 (LED port pin) OFF
+        PORTBbits.RB5 = 0; 
         }
     else 
     {
-        PORTBbits.RB5 = 1; // set RB5 (LED port pin) ON)
+        PORTBbits.RB5 = 1; 
         } 
         
         return;
