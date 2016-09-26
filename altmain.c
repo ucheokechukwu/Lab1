@@ -1,7 +1,7 @@
 /* 
  * File:   altmain.c
  * Author: Uche
- * Description: alternative code; better coding 'ethics'
+ * Description: alternative code; 'prettier'
  * Created on September 26, 2016, 10:32 AM
  */
 
