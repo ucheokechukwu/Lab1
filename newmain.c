@@ -11,7 +11,6 @@
 #include <time.h>
 
 /*delay function - not working yet... 
-
 void delay(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
@@ -24,8 +23,8 @@ void adc_init()
 {
     /*select I/O pins
      */
-    TRISA2 = 1; //set RA2 to read/input pin
-    TRISB5 = 0; //set RB5 to write/output pin
+    TRISA = 0x04; //set RA2 to read/input pin
+    TRISB = 0x00; //set all RB pins to write/output pins
     /*set A/D control registers
      */
 
@@ -45,7 +44,7 @@ unsigned int adc_read()
     unsigned int AmbientLight;
        
     /*
-     delay(1000); //delay for 1ms
+     delay(1000); //delay for 100micro-seconds
      */
     
     ADCON0bits.ADGO=1; //set the GO bit to start the ADC conversion
@@ -66,16 +65,17 @@ void main (void)
      AmbientLight is the value from the ADC result
      LightSetPoint is the set point of ambient light 
     */
+    unsigned int LightSetPoint;
+    LightSetPoint = 512; //half of the span of the span (1024)
+    unsigned int AmbientLight;
     adc_init();
     while(1)
     {
-        unsigned int LightSetPoint;
-        LightSetPoint = 512; //half of the span of the span (1024)
-        unsigned int AmbientLight = adc_read();
+        AmbientLight = adc_read();
         /*do the comparator
         * if the Ambient light is bright
-        * set RB5 (LED port pin) OFF
-        * ELSE set RB5 (LED port pin) ON
+        * reset RB5 (LED port pin)
+        * ELSE set RB5 (LED port pin)
         */
     if (AmbientLight > LightSetPoint) 
     {
