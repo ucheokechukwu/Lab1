@@ -26,10 +26,14 @@ void adc_init()
 //read ADC value
 void adc_read()
 {
+
+    int AmbientHigh; //AmbientHigh is the comparator value of actual ambient light vs setpoint
+    AmbientHigh = 0; //Default value is 0 (Ambient light < Set point). 
+    float LightSetPoint; //LightSetPoint is the set point of ambient light (below which the LED light turns on)
+    
     //configure the interrupt if required
     //delay
-    int AmbientHigh;
-    AmbientHigh = 0;
+    
     ADCON0bits.ADGO=1; //set the GO bit to start the ADC conversion
     while (ADCON0bits.ADGO=1) continue;
     
@@ -39,7 +43,7 @@ void adc_read()
      * turn off the LED output RB5
      * if Ambient is dim, turn on the LED output RB5.
     */
-    if (AmbientHigh = 1)
+    if (AmbientHigh = 1) //if the Ambient light is bright
     {
         PORTBbits.RB5 = 0; //  set RB5 (LED port pin) OFF
         }
