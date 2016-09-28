@@ -1,7 +1,8 @@
 /* 
- * File:   newmain.c
- * Author: Uche
- *
+ * File: lab1_group2.c
+ * Author: Group2
+ * Code by: Uchechukwu Okechukwu	
+ * Debugging and improvement by: Yue Wang, Stephen Cahill 
  * Created on September 24, 2016, 3:32 AM
  */
 
@@ -9,47 +10,47 @@
 #include <pic.h>
 #include <pic16f18857.h>
 
-unsigned int LightSetPoint;// LightSetPoint is the set point of ambient light 
-unsigned int AmbientLight;//AmbientLight is the value from the ADC result
-unsigned int i;
+/*---declare variables---*/
+
+unsigned int LightSetPoint; // Set point of ambient light 
+unsigned int AmbientLight; // Value from the ADC result
+unsigned int i; //Counter for the delay for loop
 
 /*---initialize ADC---*/
 void adc_init()
 {
     /* select I/O pins */
-    TRISA = 0x04; //set RA2 to read/input pin
-    TRISB = 0x00; //set all RB pins to write/output pins
+    TRISA1 = 1; //set RA1 to read/input pin
+    TRISB5 = 0; //set RB5 to write/output pin
     
     /* set A/D control registers */
-    ADCON0 = 0x21; //turn ON ADC, clock from FOSC; right-justified ADRES
+    ADCON0 = 0x84; //turn ON ADC, clock from FOSC, right-justified ADRES
     ADCLK = 0x0F; // ADC conversion clock set at FOSC/32
-    ADREF = 0x00; // Vref (+) and (-) are Vdd & Vss
-    ADPCH = 0x02; // Select Analog channel A2
+    ADREF = 0x12; /* Vref(+) and Vref (-) are selected from 
+                     the Vref(+) and Vref (-)  respectively*/
+    ADPCH = 0x01; // Select Analog channel A1
      
 } 
 
 /*--read ADC value--*/
 unsigned int adc_read()
-{
-/*---AmbientLight is the value from the ADC result---*/
-       
+{       
     ADCON0bits.ADGO=1; //set the ADGO bit to start the ADC conversion
-    while (ADCON0bits.ADGO);// continue; //wait for the conversion to the end
+    while (ADCON0bits.ADGO); //wait for the conversion to the end
     
     /*---read ADC result & save as AmbientLight---*/
     AmbientLight = ADRESL;
     AmbientLight += ADRESH << 8; //right-justified ADRES
     
-    return AmbientLight;
-    
+    return;    
 } 
- 
-// Main program
+
 void main (void)
 {
-    for (i=0; i<1500; i--); 
-    adc_init();
-    LightSetPoint = 512;//half of the span (1024)
+    for (i=0; i<1500; i--); //delay loop for ADC acquisition time
+
+    adc_init(); //initialize ADC//
+    LightSetPoint = 512; //set to half of the span (1024)
     
     /* Do the comparator:
      * IF the Ambient light is bright
@@ -58,7 +59,7 @@ void main (void)
      */
     while(1)
     {
-        AmbientLight = adc_read();
+        adc_read();
         
         if (AmbientLight < LightSetPoint) 
         {
@@ -70,4 +71,3 @@ void main (void)
         } 
     }
 }
-
