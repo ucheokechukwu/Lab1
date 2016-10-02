@@ -2,7 +2,7 @@
  * File: lab1_group2.c
  * Author: Group2
  * Code by: Uchechukwu Okechukwu	
- * Debugging and improvement by: Yue Wang, Stephen Cahill 
+ * Debugging by: Yue Wang, Stephen Cahill 
  * Created on September 24, 2016, 3:32 AM
  */
 
